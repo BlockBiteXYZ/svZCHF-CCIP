@@ -19,11 +19,7 @@ contract CCIPWrapper is CCIPReceiver {
     error InvalidToken();
     error InvalidTokenCount();
 
-    constructor(
-        ERC4626 svzchf,
-        IERC20 zchf,
-        address router
-    ) CCIPReceiver(router) {
+    constructor(ERC4626 svzchf, IERC20 zchf, address router) CCIPReceiver(router) {
         svZCHF = svzchf;
         zCHF = zchf;
         zCHF.forceApprove(address(svZCHF), type(uint256).max);
@@ -31,11 +27,10 @@ contract CCIPWrapper is CCIPReceiver {
 
     /// @notice Handles the profit and loss messages
     /// @param any2EvmMessage The message
-    function _ccipReceive(
-        Client.Any2EVMMessage memory any2EvmMessage
-    ) internal override {
-        if (any2EvmMessage.destTokenAmounts.length != 1)
+    function _ccipReceive(Client.Any2EVMMessage memory any2EvmMessage) internal override {
+        if (any2EvmMessage.destTokenAmounts.length != 1) {
             revert InvalidTokenCount();
+        }
 
         address token = any2EvmMessage.destTokenAmounts[0].token;
         uint256 amount = any2EvmMessage.destTokenAmounts[0].amount;

@@ -19,11 +19,7 @@ contract CCIPWrapperTest is Test {
         zCHF = new ZCHF();
         svZCHF = new SVZCHF(zCHF, "svZCHF", "svZCHF");
 
-        ccipWrapper = new CCIPWrapper(
-            ERC4626(address(svZCHF)),
-            IERC20(address(zCHF)),
-            router
-        );
+        ccipWrapper = new CCIPWrapper(ERC4626(address(svZCHF)), IERC20(address(zCHF)), router);
     }
 
     function test_wrap() public {
@@ -34,12 +30,8 @@ contract CCIPWrapperTest is Test {
         zCHF.mint(address(ccipWrapper), amount);
 
         // Prepare the Any2EVMMessage
-        Client.EVMTokenAmount[]
-            memory tokenAmounts = new Client.EVMTokenAmount[](1);
-        tokenAmounts[0] = Client.EVMTokenAmount({
-            token: address(zCHF),
-            amount: amount
-        });
+        Client.EVMTokenAmount[] memory tokenAmounts = new Client.EVMTokenAmount[](1);
+        tokenAmounts[0] = Client.EVMTokenAmount({token: address(zCHF), amount: amount});
         Client.Any2EVMMessage memory message = Client.Any2EVMMessage({
             messageId: bytes32(0),
             sourceChainSelector: 0,
@@ -64,12 +56,8 @@ contract CCIPWrapperTest is Test {
         zCHF.mint(address(ccipWrapper), amount);
 
         // Prepare the Any2EVMMessage
-        Client.EVMTokenAmount[]
-            memory tokenAmounts = new Client.EVMTokenAmount[](1);
-        tokenAmounts[0] = Client.EVMTokenAmount({
-            token: address(zCHF),
-            amount: amount
-        });
+        Client.EVMTokenAmount[] memory tokenAmounts = new Client.EVMTokenAmount[](1);
+        tokenAmounts[0] = Client.EVMTokenAmount({token: address(zCHF), amount: amount});
         Client.Any2EVMMessage memory message = Client.Any2EVMMessage({
             messageId: bytes32(0),
             sourceChainSelector: 0,
@@ -92,16 +80,9 @@ contract CCIPWrapperTest is Test {
         zCHF.mint(address(ccipWrapper), amount);
 
         // Prepare the Any2EVMMessage with invalid token count
-        Client.EVMTokenAmount[]
-            memory tokenAmounts = new Client.EVMTokenAmount[](2);
-        tokenAmounts[0] = Client.EVMTokenAmount({
-            token: address(zCHF),
-            amount: amount
-        });
-        tokenAmounts[1] = Client.EVMTokenAmount({
-            token: address(zCHF),
-            amount: amount
-        });
+        Client.EVMTokenAmount[] memory tokenAmounts = new Client.EVMTokenAmount[](2);
+        tokenAmounts[0] = Client.EVMTokenAmount({token: address(zCHF), amount: amount});
+        tokenAmounts[1] = Client.EVMTokenAmount({token: address(zCHF), amount: amount});
         Client.Any2EVMMessage memory message = Client.Any2EVMMessage({
             messageId: bytes32(0),
             sourceChainSelector: 0,
@@ -123,8 +104,7 @@ contract CCIPWrapperTest is Test {
         zCHF.mint(address(ccipWrapper), amount);
 
         // Prepare the Any2EVMMessage with invalid token
-        Client.EVMTokenAmount[]
-            memory tokenAmounts = new Client.EVMTokenAmount[](1);
+        Client.EVMTokenAmount[] memory tokenAmounts = new Client.EVMTokenAmount[](1);
         tokenAmounts[0] = Client.EVMTokenAmount({
             token: address(0x789), // Invalid token
             amount: amount
@@ -152,9 +132,5 @@ contract ZCHF is ERC20 {
 }
 
 contract SVZCHF is ERC4626 {
-    constructor(
-        ERC20 asset,
-        string memory name,
-        string memory symbol
-    ) ERC4626(asset) ERC20(name, symbol) {}
+    constructor(ERC20 asset, string memory name, string memory symbol) ERC4626(asset) ERC20(name, symbol) {}
 }
